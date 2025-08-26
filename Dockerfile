@@ -1,26 +1,52 @@
-# Usar Node.js 18 como base
-FROM node:18-alpine
+# ===== STAGE 1: Build =====
+FROM node:18-alpine AS builder
 
-# Establecer directorio de trabajo
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
+# Instalar dependencias del sistema necesarias
+RUN apk add --no-cache libc6-compat
+
+# Copiar package files
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm ci --only=production
+RUN npm ci
 
-# Copiar el código fuente
+# Copiar código fuente
 COPY . .
 
-# Construir la aplicación Next.js
-RUN npm run build
+# Construir la aplicación
+RUN npm run build:docker
+
+# ===== STAGE 2: Runtime =====
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Crear usuario no-root
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copiar archivos necesarios desde builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/server.js ./
+COPY --from=builder /app/package.json ./
 
 # Crear directorio para datos persistentes
-RUN mkdir -p /app/data
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 
-# Exponer el puerto
+# Cambiar a usuario no-root
+USER nextjs
+
+# Exponer puerto
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
+# Variables de entorno
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+# Comando para iniciar
 CMD ["node", "server.js"]
