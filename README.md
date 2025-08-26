@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎰 TikTok Live Ruleta
 
-## Getting Started
+Aplicación de ruleta interactiva en tiempo real para streams de TikTok Live con panel de administración completo.
 
-First, run the development server:
+## 🚀 Características
+
+- ✅ **Ruleta interactiva** con canvas HTML5
+- ✅ **Sincronización en tiempo real** via WebSockets
+- ✅ **Panel de administración** responsivo
+- ✅ **Gestión completa de opciones** (CRUD)
+- ✅ **Persistencia de datos** en archivos JSON
+- ✅ **Audio integrado** con Web Audio API
+- ✅ **Diseño responsivo** para móvil y desktop
+- ✅ **Auto-desactivación** de ganadores
+- ✅ **Sistema de backups**
+
+## 📱 Páginas
+
+- `/admin` - Panel de administración completo
+- `/ruleta` - Vista de ruleta para overlay de streaming
+
+## 🐳 Despliegue con Docker
+
+### Opción 1: Docker Compose (Recomendado)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Construir y ejecutar
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f
+
+# Detener
+docker-compose down
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Opción 2: Docker Manual
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Construir imagen
+docker build -t tiktok-ruleta .
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Ejecutar contenedor
+docker run -d -p 3000:3000 -v ruleta-data:/app/data --name tiktok-ruleta tiktok-ruleta
+```
 
-## Learn More
+## 🔧 Portainer
 
-To learn more about Next.js, take a look at the following resources:
+### Para subir a Portainer:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Comprimir el proyecto:**
+   ```bash
+   # Desde la carpeta del proyecto
+   tar -czf tiktok-ruleta.tar.gz .
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **En Portainer:**
+   - Ve a "Stacks" → "Add stack"
+   - Nombre: `tiktok-ruleta`
+   - Selecciona "Upload" 
+   - Sube el archivo `docker-compose.yml`
+   - O copia/pega el contenido del docker-compose.yml
+   - Click "Deploy the stack"
 
-## Deploy on Vercel
+3. **Variables de entorno (opcional):**
+   - `NODE_ENV=production`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Acceso
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Una vez desplegado:
+- **Aplicación:** `http://tu-servidor:3000`
+- **Admin:** `http://tu-servidor:3000/admin`
+- **Ruleta:** `http://tu-servidor:3000/ruleta`
+
+## 💾 Datos Persistentes
+
+Los datos se guardan en el volumen `ruleta-data:/app/data` que incluye:
+- Opciones de la ruleta
+- Historial de resultados
+- Backups automáticos
+
+## 🔧 Desarrollo Local
+
+```bash
+npm install
+npm run dev
+```
+
+## 📋 Tecnologías
+
+- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS
+- **Backend:** Express.js, Socket.IO
+- **Containerización:** Docker, Docker Compose
+- **Persistencia:** JSON files
+- **Audio:** Web Audio API

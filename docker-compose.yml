@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  tiktok-ruleta:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ruleta-data:/app/data
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    container_name: tiktok-ruleta-app
+
+volumes:
+  ruleta-data:
