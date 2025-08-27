@@ -1,0 +1,33 @@
+# Dockerfile simplificado para debugging
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar dependencias básicas
+RUN apk add --no-cache wget curl
+
+# Copiar package.json
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar código
+COPY . .
+
+# Build (con manejo de errores)
+RUN npm run build:docker || npm run build || echo "Build failed, continuing anyway"
+
+# Crear directorio de datos
+RUN mkdir -p /app/data
+
+# Exponer puerto
+EXPOSE 3005
+
+# Variables de entorno
+ENV NODE_ENV=production
+ENV PORT=3005
+ENV HOSTNAME=0.0.0.0
+
+# Comando de inicio con debugging
+CMD ["sh", "-c", "echo 'Starting server...' && node server.js"]

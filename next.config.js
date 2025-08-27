@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuración para Docker
-  output: 'standalone',
+  // Deshabilitar standalone para evitar problemas con servidor personalizado
+  // output: 'standalone',
   
   // Deshabilitar ESLint y TypeScript checking durante build para Docker
   eslint: {

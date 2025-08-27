@@ -1,0 +1,25 @@
+# Docker-compose para debugging
+version: '3.8'
+
+services:
+  tiktok-ruleta:
+    build: 
+      context: .
+      dockerfile: Dockerfile.debug
+    ports:
+      - "3005:3005"
+    volumes:
+      - ruleta-data:/app/data
+      - ./:/app-src  # Para development/debugging
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - HOSTNAME=0.0.0.0
+      - DEBUG=1
+    restart: "no"  # No restart para debugging
+    container_name: tiktok-ruleta-debug
+    network_mode: "bridge"
+
+volumes:
+  ruleta-data:
+    driver: local
