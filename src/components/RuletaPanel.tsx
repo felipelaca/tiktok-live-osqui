@@ -9,8 +9,8 @@ function ResultModal(props: { selected: any, onClose: () => void }) {
   }, [props.onClose]);
   
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-80 z-50 animate-fade-in">
-      <div className="bg-white rounded-3xl p-12 text-center max-w-md mx-4 shadow-2xl transform scale-105 animate-bounce-once">
+    <div className="winner-backdrop fixed inset-0 flex flex-col items-center justify-center bg-black bg-opacity-80 z-50 animate-fade-in">
+      <div className="winner-modal bg-white rounded-3xl p-12 text-center max-w-md mx-4 shadow-2xl transform scale-105 animate-bounce-once">
         <img 
           src={props.selected.image} 
           alt={props.selected.title} 
@@ -350,7 +350,7 @@ export default function RuletaPanel({ showButton = false, soundEnabled = true }:
         </button>
       )}
       
-      {options.length === 0 && !spinning && (
+      {options.length === 0 && !spinning && showButton && (
         <div className="mt-6 text-center text-gray-500 bg-yellow-50 p-4 rounded-lg border-2 border-dashed border-yellow-200">
           <p className="text-lg font-semibold">No hay opciones activas</p>
           <p className="text-sm">Agrega algunas opciones en el panel de administración</p>

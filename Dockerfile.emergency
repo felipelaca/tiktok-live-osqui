@@ -1,0 +1,41 @@
+# Dockerfile de emergencia - instalación manual
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar dependencias básicas del sistema
+RUN apk add --no-cache git python3 make g++
+
+# Copiar package.json
+COPY package*.json ./
+
+# Crear package-lock.json si no existe
+RUN npm install --package-lock-only
+
+# Instalar dependencias una por una (método nuclear)
+RUN npm install express@5.1.0 && \
+    npm install socket.io@4.8.1 && \
+    npm install socket.io-client@4.8.1 && \
+    npm install next@15.5.1 && \
+    npm install react@19.1.0 && \
+    npm install react-dom@19.1.0
+
+# Verificar instalación
+RUN ls node_modules | head -10
+
+# Copiar código
+COPY . .
+
+# Build básico (sin turbopack)
+RUN npx next build || echo "Build failed"
+
+# Crear directorio
+RUN mkdir -p data
+
+EXPOSE 3005
+
+ENV NODE_ENV=production
+ENV PORT=3005
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]

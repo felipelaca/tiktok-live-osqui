@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   tiktok-ruleta:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.simple
+      no_cache: true
     ports:
       - "3005:3005"
     volumes:

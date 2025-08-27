@@ -1,19 +1,43 @@
-# Dockerfile ultra-simple para casos problemáticos
+# Dockerfile ultra-simple con máximo debugging
 FROM node:18-alpine
 
 WORKDIR /app
 
+# Debug: mostrar información del sistema
+RUN echo "=== SYSTEM INFO ===" && \
+    node --version && \
+    npm --version && \
+    ls -la
+
 # Copiar package.json primero
 COPY package*.json ./
 
-# Instalar dependencias con más detalle
-RUN npm install --verbose
+# Debug: mostrar archivos copiados
+RUN echo "=== PACKAGE FILES ===" && \
+    ls -la && \
+    cat package.json | head -20
+
+# Limpiar npm cache y instalar dependencias
+RUN npm cache clean --force && \
+    npm install --verbose --no-audit --no-fund
+
+# Debug: verificar instalación
+RUN echo "=== NODE_MODULES CHECK ===" && \
+    ls node_modules | head -10 && \
+    test -d node_modules/express && echo "EXPRESS FOUND" || echo "EXPRESS NOT FOUND" && \
+    test -d node_modules/socket.io && echo "SOCKET.IO FOUND" || echo "SOCKET.IO NOT FOUND"
 
 # Copiar todo el código
 COPY . .
 
-# Build con manejo de errores
-RUN npm run build:docker || echo "Build may have failed but continuing..."
+# Debug: mostrar archivos finales
+RUN echo "=== FINAL FILES ===" && \
+    ls -la && \
+    echo "SERVER.JS EXISTS:" && \
+    test -f server.js && echo "YES" || echo "NO"
+
+# Build (opcional, puede fallar)
+RUN npm run build:docker || echo "Build failed but continuing..."
 
 # Crear directorio data
 RUN mkdir -p data
@@ -26,5 +50,5 @@ ENV NODE_ENV=production
 ENV PORT=3005
 ENV HOSTNAME=0.0.0.0
 
-# Comando con debug
-CMD ["sh", "-c", "echo 'Dependencies:' && ls node_modules | head -5 && echo 'Starting server...' && node server.js"]
+# Comando con máximo debugging
+CMD ["sh", "-c", "echo '=== STARTING SERVER ===' && pwd && ls -la && echo 'NODE_MODULES:' && ls node_modules | head -5 && echo 'STARTING NODE...' && node server.js"]

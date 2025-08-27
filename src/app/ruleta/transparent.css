@@ -1,0 +1,26 @@
+/* CSS para transparencia completa en la página de ruleta */
+html.transparent-html,
+body.transparent-body {
+  background: transparent !important;
+  background-color: transparent !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Asegurar que todos los elementos padre sean transparentes */
+.transparent-body * {
+  background: transparent !important;
+}
+
+/* Excepciones para elementos que SÍ necesitan background */
+.transparent-body canvas,
+.transparent-body .ruleta-container,
+.transparent-body .winner-modal,
+.transparent-body .winner-backdrop {
+  background: initial !important;
+}
+
+/* Específico para el modal de ganador */
+.transparent-body .winner-modal {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
