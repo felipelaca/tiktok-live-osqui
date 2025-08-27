@@ -1,0 +1,79 @@
+# ===============================================
+#     CONFIGURACIONES DE PUERTO ALTERNATIVAS
+# ===============================================
+
+# Si el puerto 3000 ya está ocupado, usa una de estas configuraciones:
+
+# OPCIÓN 1: Puerto 8080
+version: '3.8'
+services:
+  tiktok-ruleta:
+    build: .
+    ports:
+      - "8080:3000"  # Puerto externo 8080 -> Puerto interno 3000
+    networks:
+      - tiktok-network
+    volumes:
+      - ruleta-data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    restart: unless-stopped
+    container_name: tiktok-ruleta-app
+
+volumes:
+  ruleta-data:
+networks:
+  tiktok-network:
+
+---
+
+# OPCIÓN 2: Puerto 5000
+version: '3.8'
+services:
+  tiktok-ruleta:
+    build: .
+    ports:
+      - "5000:3000"  # Puerto externo 5000 -> Puerto interno 3000
+    networks:
+      - tiktok-network
+    volumes:
+      - ruleta-data:/app/data
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+volumes:
+  ruleta-data:
+networks:
+  tiktok-network:
+
+---
+
+# OPCIÓN 3: Con Traefik/Reverse Proxy
+version: '3.8'
+services:
+  tiktok-ruleta:
+    build: .
+    expose:
+      - "3000"  # Solo expone internamente, no al host
+    networks:
+      - traefik
+      - tiktok-network
+    volumes:
+      - ruleta-data:/app/data
+    environment:
+      - NODE_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tiktok-ruleta.rule=Host(`ruleta.tu-dominio.com`)"
+      - "traefik.http.services.tiktok-ruleta.loadbalancer.server.port=3000"
+    restart: unless-stopped
+
+volumes:
+  ruleta-data:
+networks:
+  traefik:
+    external: true
+  tiktok-network:

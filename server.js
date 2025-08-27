@@ -8,6 +8,8 @@ const path = require('path');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
+const port = process.env.PORT || 3000;
+const hostname = process.env.HOSTNAME || '0.0.0.0';
 
 // Archivo para persistir los datos
 const DATA_FILE = path.join(__dirname, 'data', 'options.json');
@@ -217,8 +219,8 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  httpServer.listen(3000, (err) => {
+  httpServer.listen(port, hostname, (err) => {
     if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
+    console.log(`> Ready on http://${hostname}:${port}`);
   });
 });

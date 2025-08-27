@@ -3,8 +3,7 @@ version: '3.8'
 services:
   tiktok-ruleta:
     build: .
-    ports:
-      - "3000:3000"
+    network_mode: "host"
     volumes:
       - ruleta-data:/app/data
     environment:

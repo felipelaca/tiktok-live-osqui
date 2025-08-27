@@ -13,6 +13,7 @@ services:
       - HOSTNAME=0.0.0.0
     restart: unless-stopped
     container_name: tiktok-ruleta-app
+    network_mode: "bridge"
 
 volumes:
   ruleta-data:
