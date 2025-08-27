@@ -7,8 +7,19 @@ body.transparent-body {
   padding: 0;
 }
 
+/* Wrapper específico para la ruleta */
+.ruleta-transparent-wrapper {
+  background: transparent !important;
+  background-color: transparent !important;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* Asegurar que todos los elementos padre sean transparentes */
-.transparent-body * {
+.transparent-body *,
+.ruleta-transparent-wrapper * {
   background: transparent !important;
 }
 
@@ -16,11 +27,16 @@ body.transparent-body {
 .transparent-body canvas,
 .transparent-body .ruleta-container,
 .transparent-body .winner-modal,
-.transparent-body .winner-backdrop {
+.transparent-body .winner-backdrop,
+.ruleta-transparent-wrapper canvas,
+.ruleta-transparent-wrapper .ruleta-container,
+.ruleta-transparent-wrapper .winner-modal,
+.ruleta-transparent-wrapper .winner-backdrop {
   background: initial !important;
 }
 
 /* Específico para el modal de ganador */
-.transparent-body .winner-modal {
+.transparent-body .winner-modal,
+.ruleta-transparent-wrapper .winner-modal {
   background: rgba(0, 0, 0, 0.8) !important;
 }

@@ -12,10 +12,8 @@ export default function RuletaLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className="transparent-html">
-      <body className="transparent-body">
-        {children}
-      </body>
-    </html>
+    <div className="ruleta-transparent-wrapper">
+      {children}
+    </div>
   )
 }

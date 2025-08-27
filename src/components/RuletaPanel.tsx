@@ -230,28 +230,70 @@ export default function RuletaPanel({ showButton = false, soundEnabled = true }:
       ctx.stroke();
       ctx.restore();
       
-      // Texto
+      // Texto con soporte para múltiples líneas
       ctx.save();
       ctx.translate(size / 2, size / 2);
       ctx.rotate(angle + (i + 0.5) * arc);
       ctx.textAlign = 'center';
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 16px "Segoe UI", system-ui, sans-serif';
+      ctx.font = 'bold 14px "Segoe UI", system-ui, sans-serif';
       ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 2;
       
-      const maxWidth = size / 2 - 50;
-      let text = opt.title;
-      if (ctx.measureText(text).width > maxWidth) {
-        while (ctx.measureText(text + '...').width > maxWidth && text.length > 0) {
-          text = text.slice(0, -1);
+      // Calcular el ancho máximo disponible en el gajo
+      const radiusForText = size / 2 - 60; // Radio donde colocar el texto
+      const arcWidth = 2 * radiusForText * Math.sin(arc / 2); // Ancho del arco en ese radio
+      const maxWidth = Math.min(arcWidth * 0.8, 120); // Limitar el ancho máximo
+      
+      // Función para dividir texto en líneas
+      const wrapText = (text: string, maxWidth: number) => {
+        const words = text.split(' ');
+        const lines = [];
+        let currentLine = words[0];
+        
+        for (let i = 1; i < words.length; i++) {
+          const word = words[i];
+          const testLine = currentLine + ' ' + word;
+          const width = ctx.measureText(testLine).width;
+          if (width < maxWidth) {
+            currentLine = testLine;
+          } else {
+            lines.push(currentLine);
+            currentLine = word;
+          }
         }
-        text += '...';
+        lines.push(currentLine);
+        
+        // Limitar a máximo 2 líneas
+        if (lines.length > 2) {
+          const truncated = lines[1];
+          let truncatedText = truncated;
+          while (ctx.measureText(truncatedText + '...').width > maxWidth && truncatedText.length > 0) {
+            truncatedText = truncatedText.slice(0, -1);
+          }
+          lines[1] = truncatedText + '...';
+          return lines.slice(0, 2);
+        }
+        
+        return lines;
+      };
+      
+      const textLines = wrapText(opt.title, maxWidth);
+      const lineHeight = 16;
+      const textRadius = radiusForText - 20;
+      
+      // Ajustar posición Y basada en número de líneas
+      let startY = 0;
+      if (textLines.length === 2) {
+        startY = -lineHeight / 2;
       }
       
-      const textX = size / 2 - 80;
-      ctx.strokeText(text, textX, 5, maxWidth);
-      ctx.fillText(text, textX, 5, maxWidth);
+      textLines.forEach((line, index) => {
+        const y = startY + (index * lineHeight);
+        ctx.strokeText(line, textRadius, y, maxWidth);
+        ctx.fillText(line, textRadius, y, maxWidth);
+      });
+      
       ctx.restore();
     });
     
