@@ -17,12 +17,12 @@ services:
   tiktok-ruleta:
     build: .
     ports:
-      - "3000:3000"
+      - "3005:3005"
     volumes:
       - ruleta-data:/app/data
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3005
       - HOSTNAME=0.0.0.0
     restart: unless-stopped
     network_mode: "bridge"
@@ -46,7 +46,7 @@ services:
       - ruleta-data:/app/data
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3005
       - HOSTNAME=0.0.0.0
     restart: unless-stopped
 
@@ -124,7 +124,7 @@ Si sigue sin funcionar:
 
 Una vez que funcione, deberías ver:
 
-- **En logs**: `> Ready on http://0.0.0.0:3000`
-- **En browser**: `http://TU-IP-SERVIDOR:3000` debe cargar la página
-- **Admin panel**: `http://TU-IP-SERVIDOR:3000/admin`
-- **Ruleta**: `http://TU-IP-SERVIDOR:3000/ruleta`
+- **En logs**: `> Ready on http://0.0.0.0:3005`
+- **En browser**: `http://TU-IP-SERVIDOR:3005` debe cargar la página
+- **Admin panel**: `http://TU-IP-SERVIDOR:3005/admin`
+- **Ruleta**: `http://TU-IP-SERVIDOR:3005/ruleta`

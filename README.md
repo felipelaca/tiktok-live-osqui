@@ -68,9 +68,9 @@ docker run -d -p 3000:3000 -v ruleta-data:/app/data --name tiktok-ruleta tiktok-
 ## 🌐 Acceso
 
 Una vez desplegado:
-- **Aplicación:** `http://tu-servidor:3000`
-- **Admin:** `http://tu-servidor:3000/admin`
-- **Ruleta:** `http://tu-servidor:3000/ruleta`
+- **Aplicación:** `http://tu-servidor:3005`
+- **Admin:** `http://tu-servidor:3005/admin`
+- **Ruleta:** `http://tu-servidor:3005/ruleta`
 
 ## 💾 Datos Persistentes
 

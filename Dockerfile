@@ -44,11 +44,11 @@ RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 USER nextjs
 
 # Exponer puerto
-EXPOSE 3000
+EXPOSE 3005
 
 # Variables de entorno
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=3005
 ENV HOSTNAME=0.0.0.0
 
 # Comando para iniciar

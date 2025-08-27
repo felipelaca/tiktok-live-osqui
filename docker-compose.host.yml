@@ -8,7 +8,7 @@ services:
       - ruleta-data:/app/data
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3005
       - HOSTNAME=0.0.0.0
     restart: unless-stopped
     container_name: tiktok-ruleta-app
