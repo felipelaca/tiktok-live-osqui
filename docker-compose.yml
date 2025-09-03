@@ -10,7 +10,7 @@ services:
     environment:
       # ← todo vía ENV, sin hardcode en el Dockerfile
       NODE_ENV: production
-      PORT: ${PORT:-3005}
+      PORT: ${PORT}
       HOST: 0.0.0.0          # por compatibilidad
       HOSTNAME: 0.0.0.0      # por compatibilidad (algunas apps leen HOSTNAME)
     networks:
@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.tiktok.entrypoints=websecure"
 
       # Service → puerto interno real de tu app
-      - "traefik.http.services.tiktok.loadbalancer.server.port=${PORT:-3005}"
+      - "traefik.http.services.tiktok.loadbalancer.server.port=${PORT}"
 
       # Middlewares globales ya aplican en el entrypoint; si quieres extra:
       # - "traefik.http.routers.tiktok.middlewares=gzip@file,secure-headers@file"
