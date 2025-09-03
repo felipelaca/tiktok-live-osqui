@@ -10,7 +10,7 @@ services:
     environment:
       # ← todo vía ENV, sin hardcode en el Dockerfile
       NODE_ENV: production
-      PORT: ${PORT}
+      PORT: 3005
       HOST: 0.0.0.0          # por compatibilidad
       HOSTNAME: 0.0.0.0      # por compatibilidad (algunas apps leen HOSTNAME)
     networks:
