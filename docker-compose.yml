@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.tiktok.entrypoints=websecure"
 
       # Service → puerto interno real de tu app
-      - "traefik.http.services.tiktok.loadbalancer.server.port=${PORT}"
+      - "traefik.http.services.tiktok.loadbalancer.server.port=3005"
 
       # Middlewares globales ya aplican en el entrypoint; si quieres extra:
       # - "traefik.http.routers.tiktok.middlewares=gzip@file,secure-headers@file"
