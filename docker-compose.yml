@@ -1,23 +1,37 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  tiktok-ruleta:
-    build: 
+  web:
+    build:
       context: .
-      dockerfile: Dockerfile.simple
-      no_cache: true
-    ports:
-      - "3005:3005"
-    volumes:
-      - ruleta-data:/app/data
-    environment:
-      - NODE_ENV=production
-      - PORT=3005
-      - HOSTNAME=0.0.0.0
+      dockerfile: Dockerfile.simple   # no tocamos el Dockerfile
+    container_name: tiktok-live-osqui
     restart: unless-stopped
-    container_name: tiktok-ruleta-app
-    network_mode: "bridge"
+    environment:
+      # ← todo vía ENV, sin hardcode en el Dockerfile
+      NODE_ENV: production
+      PORT: ${PORT:-3005}
+      HOST: 0.0.0.0          # por compatibilidad
+      HOSTNAME: 0.0.0.0      # por compatibilidad (algunas apps leen HOSTNAME)
+    networks:
+      - proxy
+    # Nada de "ports:"; Traefik enruta por la red "proxy"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
 
-volumes:
-  ruleta-data:
-    driver: local
+      # Router solo por 443 (TLS global ya está en tu traefik.yml)
+      - "traefik.http.routers.tiktok.rule=Host(`${APP_HOSTNAME}`)"
+      - "traefik.http.routers.tiktok.entrypoints=websecure"
+
+      # Service → puerto interno real de tu app
+      - "traefik.http.services.tiktok.loadbalancer.server.port=${PORT:-3005}"
+
+      # Middlewares globales ya aplican en el entrypoint; si quieres extra:
+      # - "traefik.http.routers.tiktok.middlewares=gzip@file,secure-headers@file"
+      # (SSO más adelante):
+      # - "traefik.http.routers.tiktok.middlewares=authentik@file,gzip@file,secure-headers@file"
+
+networks:
+  proxy:
+    external: true
